@@ -1,5 +1,31 @@
+"use client";
+
 import "./globals.css";
-import { DecisionProvider } from "@/context/DecisionContext";
+import { DecisionProvider, useDecisionContext } from "@/context/DecisionContext";
+
+function LayoutShell({ children }: { children: React.ReactNode }) {
+  const { result, goBack } = useDecisionContext();
+
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      {/* Wrapper controls card + back button positioning */}
+      <div className="relative flex items-start">
+        {/* Back Button – left side, parallel to card */}
+        {!result && (
+          <button
+            onClick={goBack}
+            className="absolute -left-18 top-0 text-sm font-medium text-gray-600 hover:text-black"
+          >
+            ← Back
+          </button>
+        )}
+
+        {/* Card */}
+        <div className="w-full max-w-2xl">{children}</div>
+      </div>
+    </div>
+  );
+}
 
 export default function RootLayout({
   children,
@@ -10,11 +36,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <DecisionProvider>
-          <main className="min-h-screen w-full flex items-center justify-center">
-            <div className="w-full max-w-3xl px-4 sm:px-6 md:px-8">
-              {children}
-            </div>
-          </main>
+          <LayoutShell>{children}</LayoutShell>
         </DecisionProvider>
       </body>
     </html>
