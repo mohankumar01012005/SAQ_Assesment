@@ -2,26 +2,27 @@
 
 import "./globals.css";
 import { DecisionProvider, useDecisionContext } from "@/context/DecisionContext";
+import AssessmentHistoryCard from "@/components/AssessmentHistoryCard";
 
 function LayoutShell({ children }: { children: React.ReactNode }) {
-  const { result, goBack } = useDecisionContext();
+  const { goBack } = useDecisionContext();
 
   return (
     <div className="min-h-screen flex items-center justify-center">
-      {/* Wrapper controls card + back button positioning */}
-      <div className="relative flex items-start">
-        {/* Back Button – left side, parallel to card */}
-        {!result && (
-          <button
-            onClick={goBack}
-            className="absolute -left-18 top-0 text-sm font-medium text-gray-600 hover:text-black"
-          >
-            ← Back
-          </button>
-        )}
+      <div className="relative flex gap-6 items-start">
+        {/* Back Button */}
+        <button
+          onClick={goBack}
+          className="absolute -left-18 top-0 text-sm font-medium text-gray-600 hover:text-black"
+        >
+          ← Back
+        </button>
 
-        {/* Card */}
+        {/* Main Card */}
         <div className="w-full max-w-2xl">{children}</div>
+
+        {/* History Card (RIGHT SIDE) */}
+        <AssessmentHistoryCard />
       </div>
     </div>
   );

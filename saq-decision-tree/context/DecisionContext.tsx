@@ -6,12 +6,20 @@ import { SAQType } from "@/types/decision";
 
 type HistoryItem = {
   stepId: string;
+  question: string;
+  answer: string;
 };
 
 type DecisionContextType = {
   currentStepId: string;
   result: SAQType | null;
-  answerQuestion: (nextStep?: string, result?: SAQType) => void;
+  history: HistoryItem[];
+  answerQuestion: (
+    nextStep?: string,
+    result?: SAQType,
+    answerLabel?: string
+  ) => void;
+  recordStep: (answer: string) => void; // 👈 NEW (for STEP_6)
   goBack: () => void;
   reset: () => void;
 };
@@ -29,8 +37,28 @@ export const DecisionProvider = ({
   const [result, setResult] = useState<SAQType | null>(null);
   const [history, setHistory] = useState<HistoryItem[]>([]);
 
-  const answerQuestion = (nextStep?: string, finalResult?: SAQType) => {
-    setHistory((prev) => [...prev, { stepId: currentStepId }]);
+  const recordStep = (answer: string) => {
+    const step = decisionTree[currentStepId];
+    if (!step) return;
+
+    setHistory((prev) => [
+      ...prev,
+      {
+        stepId: currentStepId,
+        question: step.question,
+        answer,
+      },
+    ]);
+  };
+
+  const answerQuestion = (
+    nextStep?: string,
+    finalResult?: SAQType,
+    answerLabel?: string
+  ) => {
+    if (answerLabel) {
+      recordStep(answerLabel);
+    }
 
     if (finalResult) {
       setResult(finalResult);
@@ -47,7 +75,6 @@ export const DecisionProvider = ({
   const goBack = () => {
     setHistory((prev) => {
       if (prev.length === 0) {
-        // STEP_1 back → safe reset
         setCurrentStepId("STEP_1");
         setResult(null);
         return [];
@@ -73,7 +100,15 @@ export const DecisionProvider = ({
 
   return (
     <DecisionContext.Provider
-      value={{ currentStepId, result, answerQuestion, goBack, reset }}
+      value={{
+        currentStepId,
+        result,
+        history,
+        answerQuestion,
+        recordStep,
+        goBack,
+        reset,
+      }}
     >
       {children}
     </DecisionContext.Provider>

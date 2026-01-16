@@ -19,7 +19,7 @@ const CONDITIONS = [
 ];
 
 export default function Step6MultiSelect() {
-  const { answerQuestion } = useDecisionContext();
+  const { answerQuestion, recordStep } = useDecisionContext();
   const [selected, setSelected] = useState<string[]>([]);
 
   const toggle = (id: string) => {
@@ -30,8 +30,12 @@ export default function Step6MultiSelect() {
 
   const handleContinue = () => {
     if (selected.length === CONDITIONS.length) {
+      // ✅ Record STEP_6 as YES
+      recordStep("Yes – All payment functions are fully outsourced");
       answerQuestion("STEP_7");
     } else {
+      // ✅ Record STEP_6 as NO
+      recordStep("No – One or more outsourcing conditions not met");
       answerQuestion(undefined, "SAQ D");
     }
   };
@@ -68,7 +72,8 @@ export default function Step6MultiSelect() {
       {/* Professional warning */}
       <p className="text-xs sm:text-sm text-slate-600 mb-4">
         ⚠️ To proceed as <strong>YES</strong>, you must select <strong>all</strong>{" "}
-        options above. Missing any condition will result in <strong>SAQ D</strong>.
+        options above. Missing any condition will result in{" "}
+        <strong>SAQ D</strong>.
       </p>
 
       <button
