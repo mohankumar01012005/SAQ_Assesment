@@ -1,43 +1,49 @@
 "use client";
 
+import { useState } from "react";
 import { useDecisionContext } from "@/context/DecisionContext";
 import { SAQ_INFO } from "@/utils/saqInfo";
+import WhyResultModal from "@/components/WhyResultModal";
 
 export default function ResultCard() {
   const { result, reset } = useDecisionContext();
+  const [showWhy, setShowWhy] = useState(false);
 
   if (!result) return null;
 
   const info = SAQ_INFO[result];
 
   return (
-    <section className="bg-white border border-slate-200 rounded-xl p-6 sm:p-8 text-center">
-      <p className="text-xs sm:text-sm font-semibold text-blue-600 mb-2">
-        PCI DSS Recommendation
-      </p>
+    <>
+      <section className="bg-white border border-slate-200 rounded-xl p-6 sm:p-8 text-center">
+        <p className="text-xs sm:text-sm font-semibold text-blue-600 mb-3">
+          PCI DSS Recommendation
+        </p>
 
-      <h1 className="text-2xl sm:text-3xl font-bold text-blue-700 mb-4">
-        {info.title}
-      </h1>
+        <h2 className="text-2xl sm:text-3xl font-bold text-blue-700 mb-3">
+          {info.title}
+        </h2>
 
-      <p className="text-sm sm:text-base text-slate-700 leading-relaxed mb-6 sm:mb-8">
-        {info.description}
-      </p>
+        <p className="text-slate-700 mb-6">{info.description}</p>
 
-      <button
-        onClick={reset}
-        className="
-          rounded-lg bg-blue-600
-          px-5 py-2 sm:px-6 sm:py-2.5
-          text-sm sm:text-base
-          text-white font-medium
-          hover:bg-blue-700
-          focus:outline-none focus:ring-2 focus:ring-blue-500
-          transition
-        "
-      >
-        Start New Assessment
-      </button>
-    </section>
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <button
+            onClick={reset}
+            className="rounded-lg bg-blue-600 px-6 py-3 text-sm sm:text-base font-medium text-white hover:bg-blue-700"
+          >
+            Start New Assessment
+          </button>
+
+          <button
+            onClick={() => setShowWhy(true)}
+            className="rounded-lg border border-blue-600 px-6 py-3 text-sm sm:text-base font-medium text-blue-600 hover:bg-blue-50"
+          >
+            Why did I get this result?
+          </button>
+        </div>
+      </section>
+
+      {showWhy && <WhyResultModal onClose={() => setShowWhy(false)} />}
+    </>
   );
 }
