@@ -19,7 +19,8 @@ export default function ResultCard() {
           PCI DSS Recommendation
         </p>
 
-        <h2 className="text-3xl font-bold text-blue-600 mb-4">
+        {/* ✅ SAQ TITLE – theme aware */}
+        <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-4">
           {info.title}
         </h2>
 
@@ -35,7 +36,9 @@ export default function ResultCard() {
 
           <button
             onClick={() => setShowWhy(true)}
-            className="rounded-lg border border-blue-600 px-6 py-3 text-blue-600 hover:bg-blue-50 dark:hover:bg-slate-700"
+            className="rounded-lg border border-blue-600 px-6 py-3
+              text-blue-600 dark:text-blue-400
+              hover:bg-blue-50 dark:hover:bg-slate-700"
           >
             Why did I get this result?
           </button>
