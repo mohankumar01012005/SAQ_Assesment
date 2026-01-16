@@ -4,27 +4,22 @@ import { useDecisionContext } from "@/context/DecisionContext";
 
 export default function AssessmentHistoryCard() {
   const { history } = useDecisionContext();
-
-  if (history.length === 0) return null;
+  if (!history.length) return null;
 
   return (
-    <div className="w-80 max-h-[75vh] overflow-y-auto rounded-xl border bg-white p-4 shadow-sm">
-      <h3 className="mb-3 text-sm font-semibold text-gray-700">
-        Assessment Path
-      </h3>
+    <aside className="surface w-80 max-h-[75vh] overflow-y-auto p-4">
+      <h3 className="mb-4 font-semibold">Assessment Path</h3>
 
-      <div className="space-y-3 text-sm">
-        {history.map((item, index) => (
-          <div key={index} className="border-b pb-2 last:border-none">
-            <p className="font-medium text-gray-800">
-              Q{index + 1}: {item.question}
+      <div className="space-y-4 text-sm">
+        {history.map((item, i) => (
+          <div key={i} className="pb-3 border-b divider">
+            <p className="font-medium">
+              Q{i + 1}: {item.question}
             </p>
-            <p className="text-gray-600">
-              Answer: <span className="font-medium">{item.answer}</span>
-            </p>
+            <p className="muted mt-1">Answer: {item.answer}</p>
           </div>
         ))}
       </div>
-    </div>
+    </aside>
   );
 }
